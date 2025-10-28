@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-const SearchInput = () => {
+interface Props {
+  onSearch: (searchText: string) => void;
+}
+
+const SearchInput = ({ onSearch }: Props) => {
   const [open, setOpen] = useState(false);
+
+  const ref = useRef<HTMLInputElement>(null);
 
   return (
     <>
-      <div className="max-w-[1240px] mx-auto my-14 search-webinar h-screen flex justify-between px-4">
+      <div className="max-w-[1240px] mx-auto my-14 search-webinar   flex justify-between px-4">
         <div className="search-drop-down relative max-w-max">
           <button
             onClick={() => setOpen(!open)}
@@ -82,7 +88,13 @@ const SearchInput = () => {
             </ul>
           </div>
         </div>
-        <form className="w-[320px]">
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (ref.current) onSearch(ref.current.value);
+          }}
+          className="w-[320px]"
+        >
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -108,11 +120,11 @@ const SearchInput = () => {
               </svg>
             </div>
             <input
+              ref={ref}
               type="search"
               id="default-search"
               className="block w-full p-[10px] ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-slate-300"
               placeholder="Search Webinars ..."
-              required
             />
           </div>
         </form>

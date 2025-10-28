@@ -28,12 +28,12 @@ const Cards: React.FC<CardsProps> = ({ event }) => {
       : null;
 
   const durationLabel =
-    event.duration_hours != null ? `${event.duration_hours}hr` : null;
-
+    event.duration_hours != null ? `${Number(event.duration_hours)}hr` : null;
+  //
   return (
-    <div className="max-w-sm border border-gray-200 rounded-lg shadow-sm bg-white dark:border-gray-700 flex flex-col overflow-hidden">
+    <div className="flex-1 max-w-sm border border-gray-200 rounded-lg shadow-sm bg-white dark:border-gray-700 flex flex-col overflow-hidden h-max ">
       {/* banner */}
-      <a href={event.cta_url ?? "#"}>
+      <a href={event.cta_url ?? "#"} target="_blank">
         <img
           className="rounded-t-lg w-full object-cover"
           src={event.banner_image_url}
@@ -44,14 +44,14 @@ const Cards: React.FC<CardsProps> = ({ event }) => {
       <div className="p-5 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex-1 flex flex-col">
         {/* title row */}
         <div className="flex items-start justify-between gap-2">
-          <a href={event.cta_url ?? "#"} className="flex-1">
+          <a href={event.cta_url ?? "#"} target="_blank" className="flex-1">
             <h5 className="mb-2 text-2xl font-bold leading-snug text-slate-900 dark:text-slate-100">
               {event.title}
             </h5>
           </a>
 
           {durationLabel && (
-            <span className="shrink-0 inline-block rounded-md bg-slate-900 dark:bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-100 dark:text-slate-900">
+            <span className="shrink-0 inline-block rounded-md bg-slate-900 dark:bg-slate-100 px-3 py-1   font-semibold text-slate-100 dark:text-slate-900">
               {durationLabel}
             </span>
           )}
@@ -74,7 +74,8 @@ const Cards: React.FC<CardsProps> = ({ event }) => {
         {event.cta_label && (
           <a
             href={event.cta_url ?? "#"}
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-auto"
+            target="_blank"
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  "
           >
             {event.cta_label}
             <svg
