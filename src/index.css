@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+/* @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *)); */
 
 @theme {
   --color-primary: #3b82f6;
   --color-primary-dark: #0d0d0d;
 }
 
-body {
-  background: rgb(3, 5, 10);
-  background: #10141e;
+.dark body {
+  @apply bg-[#0b1220] text-slate-100;
 }
