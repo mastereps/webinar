@@ -31,12 +31,22 @@ const NavBar = () => {
           </a>
         </h1>
         <ul className="hidden md:flex text-gray-700 dark:text-white">
-          <li className="p-4 text-slate-900 dark:text-slate-100">Home</li>
-          <li className="p-4 text-slate-900 dark:text-slate-100">Company</li>
-          <li className="p-4 text-slate-900 dark:text-slate-100">Resources</li>
-          <li className="p-4 text-slate-900 dark:text-slate-100">About</li>
-          <li className="p-4 text-slate-900 dark:text-slate-100">Contact</li>
-          <li className="p-4 text-slate-900 dark:text-slate-100">
+          <li className="p-4 cursor-pointer  text-slate-900 dark:text-slate-100">
+            Home
+          </li>
+          <li className="p-4 cursor-pointer  text-slate-900 dark:text-slate-100">
+            Company
+          </li>
+          <li className="p-4 cursor-pointer  text-slate-900 dark:text-slate-100">
+            Resources
+          </li>
+          <li className="p-4 cursor-pointer  text-slate-900 dark:text-slate-100">
+            About
+          </li>
+          <li className="p-4 cursor-pointer  text-slate-900 dark:text-slate-100">
+            Contact
+          </li>
+          <li className="p-4 cursor-pointer  text-slate-900 dark:text-slate-100">
             <label className="inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"

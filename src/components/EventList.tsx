@@ -4,9 +4,11 @@ import type EventCardData from "../entities/EventCard";
 
 interface Props {
   searchText: string;
+  topic: string;
+  order: string; // dateAsc | dateDesc | titleAsc | durationAsc | durationDesc
 }
 
-const EventsList: React.FC<Props> = ({ searchText }) => {
+const EventsList: React.FC<Props> = ({ searchText, topic, order }) => {
   const [events, setEvents] = useState<EventCardData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,11 +36,52 @@ const EventsList: React.FC<Props> = ({ searchText }) => {
     fetchEvents();
   }, []);
 
+  function inferTopic(ev: EventCardData): string {
+    const text = `${ev.title} ${ev.description}`.toLowerCase();
+    if (/(social\s*-?emotional|sel)/i.test(text)) return "Social-Emotional Learning";
+    if (/(research|publication|writing|publish)/i.test(text)) return "Research & Publication";
+    if (/(digital|online|platform|edtech|technology)/i.test(text)) return "Digital Learning";
+    if (/(strategy|strategies|classroom|tips|tricks)/i.test(text)) return "Classroom Strategies";
+    if (/(curriculum|design)/i.test(text)) return "Curriculum Design";
+    return "Other";
+  }
+
   const filtered = useMemo(() => {
     const q = searchText.trim().toLowerCase();
-    if (!q) return events;
-    return events.filter((ev) => ev.title.toLowerCase().includes(q));
-  }, [events, searchText]);
+    const bySearch = q
+      ? events.filter((ev) => ev.title.toLowerCase().includes(q))
+      : events;
+
+    const byTopic = topic && topic !== "All"
+      ? bySearch.filter((ev) => inferTopic(ev) === topic)
+      : bySearch;
+
+    const sorted = [...byTopic];
+    const toTime = (d: string | null) => (d ? new Date(d).getTime() : Number.POSITIVE_INFINITY);
+    const toNum = (n: number | null) => (n ?? Number.POSITIVE_INFINITY);
+
+    switch (order) {
+      case "dateAsc":
+        sorted.sort((a, b) => toTime(a.event_date) - toTime(b.event_date));
+        break;
+      case "dateDesc":
+        sorted.sort((a, b) => toTime(b.event_date) - toTime(a.event_date));
+        break;
+      case "titleAsc":
+        sorted.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "durationAsc":
+        sorted.sort((a, b) => toNum(a.duration_hours) - toNum(b.duration_hours));
+        break;
+      case "durationDesc":
+        sorted.sort((a, b) => toNum(b.duration_hours) - toNum(a.duration_hours));
+        break;
+      default:
+        break;
+    }
+
+    return sorted;
+  }, [events, searchText, topic, order]);
 
   if (loading) {
     return (
