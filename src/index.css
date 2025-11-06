@@ -1,17 +1,26 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-/* @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *)); */
+/* @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
   --color-primary: #3b82f6;
   --color-primary-dark: #0d0d0d;
 }
-body {
-  background: #eae9e9;
-  background: #fafafa;
-}
 
 .dark body {
   @apply bg-[#0b1220] text-slate-100;
+}
+
+.active {
+  background: deeppink;
+}
+body {
+  background: #eae9e9;
+  background: #fafafa;
+} */
+
+/* FIXME: tutorial */
+button[disabled] {
+  cursor: not-allowed;
 }

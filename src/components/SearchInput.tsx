@@ -25,18 +25,25 @@ const ORDER_OPTIONS: { value: string; label: string }[] = [
   { value: "durationDesc", label: "Duration (long->short)" },
 ];
 
-const SearchInput = ({ onSearch, topic, onTopicChange, order, onOrderChange }: Props) => {
+const SearchInput = ({
+  onSearch,
+  topic,
+  onTopicChange,
+  order,
+  onOrderChange,
+}: Props) => {
   const [openTopic, setOpenTopic] = useState(false);
   const [openOrder, setOpenOrder] = useState(false);
 
   const ref = useRef<HTMLInputElement>(null);
 
-  const orderLabel = ORDER_OPTIONS.find((o) => o.value === order)?.label ?? "Date (soonest)";
+  const orderLabel =
+    ORDER_OPTIONS.find((o) => o.value === order)?.label ?? "Date (soonest)";
 
   return (
     <>
       <div className="max-w-[1240px] mx-auto my-14 search-webinar px-4">
-        <h1 className="text-4xl font-extrabold text-slate-900 dark:text-slate-100 mb-4">
+        <h1 className="bg-[#232323] text-4xl font-extrabold text-slate-900 dark:text-slate-100 mb-4">
           {topic === "All" ? "Webinars" : `${topic} Webinars`}
         </h1>
 
@@ -52,8 +59,20 @@ const SearchInput = ({ onSearch, topic, onTopicChange, order, onOrderChange }: P
                 className="text-slate-700 dark:text-slate-100 bg-white-700 hover:bg-[#fbf9ff] focus:outline-none cursor-pointer shadow-sm font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-700 dark:hover:bg-gray-600"
               >
                 {topic === "All" ? "Topic" : topic}
-                <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                <svg
+                  className="w-2.5 h-2.5 ms-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 4 4 4-4"
+                  />
                 </svg>
               </button>
               <div
@@ -90,8 +109,20 @@ const SearchInput = ({ onSearch, topic, onTopicChange, order, onOrderChange }: P
                 className="text-slate-700 dark:text-slate-100 bg-white-700 hover:bg-[#fbf9ff] focus:outline-none cursor-pointer shadow-sm font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-700 dark:hover:bg-gray-600"
               >
                 {`Order by: ${orderLabel}`}
-                <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                <svg
+                  className="w-2.5 h-2.5 ms-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 4 4 4-4"
+                  />
                 </svg>
               </button>
               <div
@@ -127,7 +158,10 @@ const SearchInput = ({ onSearch, topic, onTopicChange, order, onOrderChange }: P
             }}
             className="w-[320px]"
           >
-            <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+            >
               Search
             </label>
             <div className="relative">
@@ -139,7 +173,13 @@ const SearchInput = ({ onSearch, topic, onTopicChange, order, onOrderChange }: P
                   fill="none"
                   viewBox="0 0 20 20"
                 >
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
                 </svg>
               </div>
               <input

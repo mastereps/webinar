@@ -1,0 +1,15 @@
+.btn {
+  background: transparent;
+  border: 1px solid turquoise;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: turquoise;
+  color: #fff;
+}
+
+.wesa {
+  background: deeppink;
+}
