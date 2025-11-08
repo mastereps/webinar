@@ -28,3 +28,4 @@ const Expandable = ({ children, maxChars = 100 }: Props) => {
 };
 
 export default Expandable;
+<Expandable maxChars={40}>Lorem</Expandable>;
