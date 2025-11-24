@@ -3,11 +3,22 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import CompanyLogo from "../assets/cequena_training.png";
 const NavBar = () => {
   const [nav, setNav] = useState(true);
-  const [isDark, setDark] = useState(false);
+  const [isDark, setDark] = useState(() => {
+    if (typeof window === "undefined") return false; // SSR/defensive
+    return localStorage.getItem("theme") === "dark";
+  });
 
   useEffect(() => {
+    const next = isDark ? "dark" : "light";
     document.documentElement.classList.toggle("dark", isDark);
+    localStorage.setItem("theme", next);
   }, [isDark]);
+
+  // const [isDark, setDark] = useState(false);
+
+  // useEffect(() => {
+  //   document.documentElement.classList.toggle("dark", isDark);
+  // }, [isDark]);
 
   const toggleTheme = () => {
     setDark(!isDark);

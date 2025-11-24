@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* @custom-variant dark (&:where(.dark, .dark *));
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant dark (&:where(.dark, .dark *));
+/* @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *)); */
 
 @theme {
   --color-primary: #3b82f6;
@@ -18,9 +18,9 @@
 body {
   background: #eae9e9;
   background: #fafafa;
-} */
+}
 
 /* FIXME: tutorial */
-button[disabled] {
+/* button[disabled] {
   cursor: not-allowed;
-}
+} */
