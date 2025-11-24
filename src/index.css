@@ -6,10 +6,12 @@
 @theme {
   --color-primary: #3b82f6;
   --color-primary-dark: #0d0d0d;
+  --color-lantern: #61b08b;
 }
 
 .dark body {
-  @apply bg-[#0b1220] text-slate-100;
+  /* @apply bg-[#0b1220] text-slate-100; */
+  @apply bg-[#000] text-slate-100;
 }
 
 .active {

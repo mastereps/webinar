@@ -1,7 +1,8 @@
 // import LoginForm from "./components/LoginForm";
 
-// import EventsList from "./components/EventList";
 import NavBar from "./components/NavBar";
+import LandingPage from "./landing-page/LandingPage";
+// import EventsList from "./components/EventList";
 // import SearchInput from "./components/SearchInput";
 // import { useState } from "react";
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <>
       <NavBar />
+      <LandingPage />
       {/* <SearchInput
         onSearch={(text) => setSearchText(text)}
         topic={topic}
