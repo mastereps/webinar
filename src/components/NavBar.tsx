@@ -43,7 +43,7 @@ const NavBar = () => {
             <span className="hidden">Cequena Training and Consultancy</span>{" "}
             <a className="block" href="/">
               <img
-                className="w-[5rem] rounded-full"
+                className="w-20 rounded-full"
                 src={CompanyLogo}
                 alt="Cequeña Training and Consultancy"
               />
@@ -60,7 +60,7 @@ const NavBar = () => {
               >
                 <a
                   className="relative inline-block
-      after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-current
+      after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:bg-current
       after:scale-x-0 after:origin-right after:transition-transform after:duration-300 after:ease-out
       group-hover:after:scale-x-100 group-hover:after:origin-left"
                   href={href}
@@ -69,7 +69,7 @@ const NavBar = () => {
                 </a>
               </li>
             ))}
-            <li className="p-4 cursor-pointer  text-slate-900 dark:text-slate-100">
+            <li className="p-4 text-slate-900 dark:text-slate-100">
               <label className="inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"

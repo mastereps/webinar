@@ -14,6 +14,22 @@
   @apply bg-[#000] text-slate-100;
 }
 
+/* FONTS */
+
+@font-face {
+  font-family: "Heading Font";
+  src: url("./assets/Teko-Bold.ttf") format("truetype"); /* or, better, use .woff2 */
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-heading {
+  font-family: "Heading Font", system-ui, sans-serif;
+}
+
+/* FONTS */
+
 .active {
   background: deeppink;
 }

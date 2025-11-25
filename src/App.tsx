@@ -23,7 +23,7 @@ function App() {
         onOrderChange={setOrder}
       />
       <EventsList searchText={searchText} topic={topic} order={order} />
-      <LoginForm /> */}
+     <LoginForm /> */}
     </>
   );
 }

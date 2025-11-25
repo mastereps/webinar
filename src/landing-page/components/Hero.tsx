@@ -16,6 +16,11 @@ const Hero = () => {
         alt="Banner"
         className="h-full w-screen object-cover"
       />
+      <div className="hero-content relative z-30">
+        <h2 className=" font-heading text-4xl tracking-wide text-white">
+          SHOP APPAREL
+        </h2>
+      </div>
     </section>
   );
 };
