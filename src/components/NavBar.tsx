@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import CompanyLogo from "../assets/cequena_training.png";
+import CompanyLogo from "../assets/images/cequena_training.png";
 const NavBar = () => {
   const links = [
     { label: "Home", href: "/" },

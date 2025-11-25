@@ -11,14 +11,14 @@
 
 .dark body {
   /* @apply bg-[#0b1220] text-slate-100; */
-  @apply bg-[#000] text-slate-100;
+  @apply bg-[#000] text-white;
 }
 
 /* FONTS */
 
 @font-face {
   font-family: "Heading Font";
-  src: url("./assets/Teko-Bold.ttf") format("truetype"); /* or, better, use .woff2 */
+  src: url("./assets/fonts/Teko-Bold.ttf") format("truetype"); /* or, better, use .woff2 */
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -26,6 +26,18 @@
 
 .font-heading {
   font-family: "Heading Font", system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: "Abel";
+  src: url("./assets/fonts/abel.woff2") format("woff2"); /* or, better, use .woff2 */
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-text {
+  font-family: "Abel", system-ui, sans-serif;
 }
 
 /* FONTS */
