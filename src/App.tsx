@@ -2,6 +2,7 @@
 
 import NavBar from "./components/NavBar";
 import LandingPage from "./landing-page/LandingPage";
+import Footer from "./pages/Footer";
 // import EventsList from "./components/EventList";
 // import SearchInput from "./components/SearchInput";
 // import { useState } from "react";
@@ -24,6 +25,7 @@ function App() {
       />
       <EventsList searchText={searchText} topic={topic} order={order} />
      <LoginForm /> */}
+      <Footer />
     </>
   );
 }
