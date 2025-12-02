@@ -88,6 +88,17 @@ body {
   pointer-events: auto;
 }
 
+.bs_item .book_cta {
+  transform: translate(-50%, 60px);
+  opacity: 0;
+}
+
+.bs_item:hover .book_cta {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: all;
+}
+
 /* FIXME: tutorial */
 /* button[disabled] {
   cursor: not-allowed;
