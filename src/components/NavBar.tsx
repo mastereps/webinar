@@ -37,7 +37,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="absolute z-420 w-full  bg-white dark:bg-black">
+      <nav className="fixed top-0 left-0 z-420 w-full  bg-white dark:bg-black border-b border-[rgba(255,255,255,0.15)]">
         <div className="flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-white ">
           <h1 className="text-3xl font-bold text-lantern">
             <span className="hidden">Cequena Training and Consultancy</span>{" "}

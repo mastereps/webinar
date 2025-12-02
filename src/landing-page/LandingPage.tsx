@@ -1,5 +1,6 @@
 import About from "./components/About";
 import Credibility from "./components/Credibility";
+import FeaturedBooksSection from "./components/FeaturedBooksSection";
 import Hero from "./components/Hero";
 
 const LandingPage = () => {
@@ -7,6 +8,7 @@ const LandingPage = () => {
     <>
       <Hero />
       <About />
+      <FeaturedBooksSection />
       <Credibility />
     </>
   );
