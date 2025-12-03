@@ -2,7 +2,7 @@ import MariaPhoto from "../../assets/images/maria_cequena_real.png";
 
 const About = () => {
   return (
-    <section className="text-center mt-20">
+    <section className="text-center mt-30">
       <header className="mb-11">
         <p className=" headline-gradient text-lg font-text uppercase tracking-[0.05em] mb-4 font-bold">
           Hello,

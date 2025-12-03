@@ -1,6 +1,6 @@
 const Credibility = () => {
   return (
-    <section className="text-center mt-20">
+    <section className="text-center mt-40">
       <header className="mb-11">
         <p className=" headline-gradient text-lg font-text uppercase tracking-[0.05em] mb-4 font-bold">
           Recognized in Education and Research
