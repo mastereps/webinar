@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import CompanyLogo from "../assets/images/cequena_training.png";
@@ -41,13 +42,13 @@ const NavBar = () => {
         <div className="flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-white ">
           <h1 className="text-3xl font-bold text-lantern">
             <span className="hidden">Cequena Training and Consultancy</span>{" "}
-            <a className="block" href="/">
+            <Link className="block" to="/">
               <img
                 className="w-20 rounded-full"
                 src={CompanyLogo}
                 alt="Cequeña Training and Consultancy"
               />
-            </a>
+            </Link>
           </h1>
           <ul className="hidden md:flex text-gray-700 dark:text-white">
             {links.map(({ label, href }) => (

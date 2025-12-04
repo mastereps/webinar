@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 import { FiEye } from "react-icons/fi";
 import type { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -85,7 +85,7 @@ const FeaturedBooksSection = () => {
       </header>
       <div className="swiper_wrapper relative">
         <Swiper
-          modules={[Navigation, Pagination]}
+          modules={[Navigation, Pagination, A11y]}
           navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
           onBeforeInit={(swiper) => {
             swiperRef.current = swiper;
@@ -95,8 +95,20 @@ const FeaturedBooksSection = () => {
               nextEl: nextRef.current,
             };
           }}
-          pagination={{ clickable: true }}
-          loop
+          pagination={{
+            clickable: true,
+            bulletClass: "hero-dot",
+            bulletActiveClass: "hero-dot-active",
+            renderBullet: (index, className) =>
+              `<button type="button" class="${className}" tabindex="0" aria-label="Go to slide ${
+                index + 1
+              }"></button>`,
+          }}
+          a11y={{
+            enabled: true,
+            paginationBulletMessage: "Go to slide {{index}}",
+          }}
+          rewind
           spaceBetween={30}
           breakpoints={{
             320: { slidesPerView: 1.3, centeredSlides: true },

@@ -216,7 +216,53 @@ body {
   pointer-events: none;
 } */
 
+/* Dot */
 /* FIXME: tutorial */
 /* button[disabled] {
   cursor: not-allowed;
 } */
+.book_slider .swiper-pagination {
+  bottom: 28px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.book_slider .hero-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  border: 2px solid rgba(0, 0, 0, 0.35); /* visible on light bg */
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.book_slider .hero-dot:hover {
+  border-color: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.book_slider .hero-dot-active {
+  border-color: #000;
+  background: #000;
+}
+
+/* Dark mode override */
+.dark .book_slider .hero-dot {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.dark .book_slider .hero-dot:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.dark .book_slider .hero-dot-active {
+  border-color: #fff;
+  background: #fff;
+}
