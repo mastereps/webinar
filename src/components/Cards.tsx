@@ -31,11 +31,11 @@ const Cards: React.FC<CardsProps> = ({ event }) => {
     event.duration_hours != null ? `${Number(event.duration_hours)}hr` : null;
   //
   return (
-    <div className="flex-1 max-w-sm border border-gray-200 rounded-lg shadow-sm bg-white dark:border-gray-700 flex flex-col overflow-hidden h-max ">
+    <div className="flex-1 max-w-sm border border-gray-200 rounded-lg shadow-sm bg-white dark:border-gray-700 flex flex-col overflow-hidden h-full ">
       {/* banner */}
       <a href={event.cta_url ?? "#"} target="_blank">
         <img
-          className="rounded-t-lg w-full object-cover"
+          className="rounded-t-lg w-full object-cover h-[250px]"
           src={event.banner_image_url}
           alt={event.title}
         />
@@ -71,7 +71,7 @@ const Cards: React.FC<CardsProps> = ({ event }) => {
         )}
 
         {/* CTA button */}
-        {event.cta_label && (
+        {/* {event.cta_label && (
           <a
             href={event.cta_url ?? "#"}
             target="_blank"
@@ -94,7 +94,7 @@ const Cards: React.FC<CardsProps> = ({ event }) => {
               />
             </svg>
           </a>
-        )}
+        )} */}
       </div>
     </div>
   );

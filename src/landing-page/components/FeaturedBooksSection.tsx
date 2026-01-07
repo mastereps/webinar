@@ -1,67 +1,33 @@
-﻿import pathwaysProficient from "../../assets/images/bb_pathwaytoproficientreader.png";
-import metacognitiveCurriculum from "../../assets/images/bb_metacognitiv.png";
-import beyondOrdeal from "../../assets/images/bb_beyondordea.png";
-import WorksheetsESLTeaching from "../../assets/images/bb_beyondworsheet.png";
-import ReflectiveTeacher from "../../assets/images/bb_thereflectiveteacherinclassroo.png";
-import TomeOfKnowledge from "../../assets/images/book_red.png";
-import TomeOfWisdom from "../../assets/images/book_purple.png";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { FiEye } from "react-icons/fi";
 import type { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
+import BookQuickViewModal from "../../components/BookQuickViewModal";
+import type Book from "../../entities/Book";
+import { formatPrice } from "../../utils/formatPrice";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const books = [
-  {
-    title: "Pathways to Proficient Readers",
-    price: "PHP 200.00",
-    img: pathwaysProficient,
-  },
-  {
-    title: "Beyond Worksheets in ESL Teaching",
-    price: "PHP 400.00",
-    img: WorksheetsESLTeaching,
-  },
-  {
-    title: "Metacognitive strategy use and curriculum design",
-    price: "PHP 2,400.00",
-    img: metacognitiveCurriculum,
-  },
-  {
-    title: "Beyond the Ordeal: Book of Poems",
-    price: "PHP 290.00",
-    img: beyondOrdeal,
-  },
-  {
-    title: "The Reflective Teacher in the Classroom",
-    price: "PHP 499.00",
-    img: ReflectiveTeacher,
-  },
-  {
-    title: "Tome of Knowledge",
-    price: "PHP 290.00",
-    img: TomeOfKnowledge,
-  },
-  {
-    title: "Tome of Wisdom",
-    price: "PHP 499.00",
-    img: TomeOfWisdom,
-  },
-];
-
 const FeaturedBooksSection = () => {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalBook, setModalBook] = useState<Book | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
+  const [navReady, setNavReady] = useState(false);
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
 
   useEffect(() => {
     const swiper = swiperRef.current;
-    if (!swiper || !prevRef.current || !nextRef.current) return;
+    if (!navReady || !swiper || !prevRef.current || !nextRef.current) return;
 
-    // Re-bind nav after refs are set
     swiper.params.navigation = {
       ...(swiper.params.navigation as object),
       prevEl: prevRef.current,
@@ -70,7 +36,69 @@ const FeaturedBooksSection = () => {
     swiper.navigation.destroy();
     swiper.navigation.init();
     swiper.navigation.update();
+  }, [navReady, books.length]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch("/api/books");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data: Book[] = await res.json();
+        if (!cancelled) setBooks(data);
+      } catch (err) {
+        console.error("Failed to load books", err);
+        if (!cancelled) setError("Couldn't load books right now.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  const openQuickView = async (slug: string) => {
+    if (!slug) return;
+    setModalOpen(true);
+    setModalLoading(true);
+    setModalError(null);
+    setModalBook(null);
+
+    try {
+      const res = await fetch(`/api/books/${slug}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data: Book = await res.json();
+      setModalBook(data);
+    } catch (err) {
+      console.error("Failed to load book details", err);
+      setModalError("Couldn't load book details right now.");
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  const closeQuickView = () => {
+    setModalOpen(false);
+    setModalBook(null);
+    setModalError(null);
+    setModalLoading(false);
+  };
+
+  if (loading)
+    return (
+      <section className="text-center mt-40 min-[1100px]:max-w-[1100px] mx-auto">
+        Loading books...
+      </section>
+    );
+  if (error)
+    return (
+      <section className="text-center mt-40 min-[1100px]:max-w-[1100px] mx-auto text-red-600">
+        {error}
+      </section>
+    );
+  if (books.length === 0) return null;
 
   return (
     <section className="text-center mt-40 min-[1100px]:max-w-[1100px] mx-auto">
@@ -87,13 +115,9 @@ const FeaturedBooksSection = () => {
         <Swiper
           modules={[Navigation, Pagination, A11y]}
           navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
-          onBeforeInit={(swiper) => {
+          onSwiper={(swiper) => {
             swiperRef.current = swiper;
-            swiper.params.navigation = {
-              ...(swiper.params.navigation as object),
-              prevEl: prevRef.current,
-              nextEl: nextRef.current,
-            };
+            setNavReady(true);
           }}
           pagination={{
             clickable: true,
@@ -120,13 +144,13 @@ const FeaturedBooksSection = () => {
         >
           {books.map((book) => (
             <SwiperSlide
-              key={book.title}
+              key={book.slug || book.id}
               className="flex flex-col items-center"
             >
               <div className="bs_item relative max-w-56 cursor-pointer">
                 <div className="bs-img max-h-56 relative overflow-hidden">
                   <img
-                    src={book.img}
+                    src={book.cover_image_url}
                     alt={book.title}
                     width={225}
                     height={225}
@@ -140,20 +164,27 @@ const FeaturedBooksSection = () => {
                           <span className="absolute top-1/2 right-[-7px] -translate-y-1/2 w-0 h-0 border-y-8 border-y-transparent border-l-8 border-l-lantern"></span>
                         </div>
                       </div>
-                      <button className="fi_eye cursor-pointer flex h-10 w-10 items-center justify-center rounded-full dark:bg-white bg-black shadow-md opacity-0 transition-all duration-200 hover:scale-110">
+                      <button
+                        className="fi_eye cursor-pointer flex h-10 w-10 items-center justify-center rounded-full dark:bg-white bg-black shadow-md opacity-0 transition-all duration-200 hover:scale-110"
+                        onClick={() => openQuickView(book.slug)}
+                        aria-label={`Quick view ${book.title}`}
+                      >
                         <FiEye className="dark:text-black text-white" />
                       </button>
                     </div>
-                    <button className="book_cta absolute cursor-pointer inline-block px-8 py-3 font-text font-bold uppercase tracking-[0.08em] bg-lantern text-white transition-all duration-300 hover:bg-lantern hover:text-white hover:shadow-[0_10px_30px_rgba(97,176,139,0.35)] dark:hover:bg-white dark:hover:text-black dark:hover:shadow-[0_0_0_.2rem_#fff] z-20 bottom-6 left-1/2 w-[95%]">
+                    <Link
+                      to={`/products/${book.slug}`}
+                      className="book_cta absolute inline-block px-8 py-3 font-text font-bold uppercase tracking-[0.08em] bg-lantern text-white transition-all duration-300 hover:bg-lantern hover:text-white hover:shadow-[0_10px_30px_rgba(97,176,139,0.35)] dark:hover:bg-white dark:hover:text-black dark:hover:shadow-[0_0_0_.2rem_#fff] z-20 bottom-6 left-1/2 w-[95%] text-center"
+                    >
                       Get Copy
-                    </button>
+                    </Link>
                   </div>
                 </div>
                 <div className="bs-description mt-3">
-                  <a href="#" className="uppercase">
+                  <Link to={`/products/${book.slug}`} className="uppercase">
                     <h3 className="font-bold mb-2">{book.title}</h3>
-                    <span>{book.price}</span>
-                  </a>
+                    <span>{formatPrice(book.price_cents, book.currency)}</span>
+                  </Link>
                 </div>
               </div>
             </SwiperSlide>
@@ -168,6 +199,15 @@ const FeaturedBooksSection = () => {
             <span className="sr-only">Next</span>
           </button>
         </div>
+      </div>
+      <div className="text-left">
+        <BookQuickViewModal
+          open={modalOpen}
+          book={modalBook}
+          loading={modalLoading}
+          error={modalError}
+          onClose={closeQuickView}
+        />
       </div>
     </section>
   );

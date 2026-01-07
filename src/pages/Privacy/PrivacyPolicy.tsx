@@ -56,7 +56,7 @@ const PrivacyPolicy = () => {
           </li>
         </ul>
         <h2 className="text-xl mb-2">Sharing your information</h2>
-        <p>
+        <p className="mb-10">
           We share personal information only with trusted service providers who
           help us operate our webinars, process payments, manage email
           communications, ship books, and analyze site performance. We do not

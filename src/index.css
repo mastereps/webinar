@@ -52,6 +52,18 @@ body {
     sans-serif;
 }
 
+/* Remove number input spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 /* Header Fonts */
 /* .headline-gradient {
   background: linear-gradient(90deg, #61b08b 0%, #e9f6ef 50%, #f2716a 100%);
