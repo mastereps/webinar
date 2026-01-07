@@ -1,7 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import type Book from "../entities/Book";
 import { formatPrice } from "../utils/formatPrice";
+import BeyondOrdealAlt from "../assets/images/BeyondOrdeal_2.png";
+import KaleidoscopeOne from "../assets/images/Kaleidoscope_1.png";
+import KaleidoscopeTwo from "../assets/images/Kaleidoscope_2.png";
+import BeyondOrdealCover from "../assets/images/book_BeyondTheOrdeal.jpg";
+import BookGreen from "../assets/images/book_green.png";
+import MetacognitiveAlt from "../assets/images/book_metacognittive.jpg";
+import BookRed from "../assets/images/book_red.png";
 
 type Props = {
   open: boolean;
@@ -13,12 +21,48 @@ type Props = {
 
 const clampQuantity = (value: number) => Math.min(99, Math.max(1, value));
 
+// Local-only slider images until CDN links are available.
+const localImageMap: Record<string, string[]> = {
+  "beyond-the-ordeal-book-of-poems": [BeyondOrdealCover, BeyondOrdealAlt],
+  "metacognitive-strategy-use-and-curriculum-design": [MetacognitiveAlt],
+  "pathways-to-proficient-readers": [KaleidoscopeOne, KaleidoscopeTwo],
+  "tome-of-knowledge": [BookGreen],
+  "tome-of-wisdom": [BookRed],
+};
+
 const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
   const [quantity, setQuantity] = useState(1);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isImageVisible, setIsImageVisible] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<"next" | "prev">("next");
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
   useEffect(() => {
-    if (open) setQuantity(1);
+    if (open) {
+      setQuantity(1);
+      setActiveImageIndex(0);
+      setIsImageVisible(false);
+      setSlideDirection("next");
+      setHasInteracted(false);
+    } else {
+      setIsImageVisible(false);
+      setHasInteracted(false);
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    }
   }, [open, book?.id]);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -28,10 +72,86 @@ const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, onClose]);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
 
-  const imageUrl = book?.images?.[0] || book?.cover_image_url;
+  const localImages = book?.slug ? localImageMap[book.slug] : undefined;
+  const candidates = [
+    ...(book?.cover_image_url ? [book.cover_image_url] : []),
+    ...(book?.images ?? []),
+    ...(localImages ?? []),
+  ].filter(Boolean);
+  const seen = new Set<string>();
+  const images = candidates.filter((image) => {
+    if (seen.has(image)) return false;
+    seen.add(image);
+    return true;
+  });
+  const hasMultipleImages = images.length > 1;
+  const activeImageUrl = images[activeImageIndex];
   const description = book?.short_description || book?.details;
+  const slideOffsetClass = !hasInteracted
+    ? ""
+    : slideDirection === "next"
+    ? "translate-x-6"
+    : "-translate-x-6";
+  const imageTransitionClass = hasInteracted
+    ? "transition-transform duration-300 ease-out"
+    : "transition-opacity duration-300 ease-out";
+  const imageOpacityClass = hasInteracted
+    ? "opacity-100"
+    : isImageVisible
+    ? "opacity-100"
+    : "opacity-0";
+  const imageTranslateClass = hasInteracted
+    ? isImageVisible
+      ? "translate-x-0"
+      : slideOffsetClass
+    : "translate-x-0";
+
+  const handleImageChange = (direction: "next" | "prev") => {
+    if (images.length <= 1) return;
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+      transitionTimeoutRef.current = null;
+    }
+    setSlideDirection(direction);
+    setHasInteracted(true);
+    setIsImageVisible(false);
+    setActiveImageIndex((prev) => {
+      const nextIndex = direction === "next" ? prev + 1 : prev - 1;
+      return (nextIndex + images.length) % images.length;
+    });
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsImageVisible(true);
+      transitionTimeoutRef.current = null;
+    }, 20);
+  };
+
+  useEffect(() => {
+    if (!open || !activeImageUrl || hasInteracted) return;
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsImageVisible(true);
+      transitionTimeoutRef.current = null;
+    }, 20);
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = null;
+      }
+    };
+  }, [open, activeImageUrl, hasInteracted]);
+
+  if (!open) return null;
 
   return (
     <div
@@ -41,7 +161,7 @@ const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-3xl rounded-lg bg-white text-black shadow-2xl dark:bg-[#1a1a1a] dark:text-white"
+        className="relative w-full max-w-4xl rounded-lg bg-white text-black shadow-2xl dark:bg-[#1a1a1a] dark:text-white"
         onClick={(event) => event.stopPropagation()}
       >
         <button
@@ -54,17 +174,37 @@ const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
         </button>
 
         <div className="grid gap-6 md:grid-cols-[1fr_1fr]">
-          <div className="flex items-center justify-center">
-            {imageUrl ? (
+          <div className="relative flex items-center justify-center">
+            {hasMultipleImages && (
+              <button
+                type="button"
+                aria-label="Previous image"
+                onClick={() => handleImageChange("prev")}
+                className="absolute z-30 cursor-pointer left-4 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-100 dark:border-slate-700 dark:bg-[#111] dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                <FaArrowLeft className="text-[16px]" aria-hidden="true" />
+              </button>
+            )}
+            {activeImageUrl ? (
               <img
-                src={imageUrl}
+                src={activeImageUrl}
                 alt={book?.title || "Book cover"}
-                className="h-56 w-56 object-contain"
+                className={` w-88 h-88  object-contain ${imageTransitionClass} ${imageOpacityClass} ${imageTranslateClass}`}
               />
             ) : (
-              <div className="flex h-56 w-56 items-center justify-center rounded bg-slate-100 text-sm text-slate-500 dark:bg-[#111] dark:text-slate-400">
+              <div className="flex  w-88 h-88  items-center justify-center rounded bg-slate-100 text-sm text-slate-500 dark:bg-[#111] dark:text-slate-400">
                 No image
               </div>
+            )}
+            {hasMultipleImages && (
+              <button
+                type="button"
+                aria-label="Next image"
+                onClick={() => handleImageChange("next")}
+                className="absolute z-30 cursor-pointer right-4 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-100 dark:border-slate-700 dark:bg-[#111] dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                <FaArrowRight className="text-[16px]" aria-hidden="true" />
+              </button>
             )}
           </div>
 
@@ -99,41 +239,49 @@ const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
                   <p className="mb-2    text-slate-500 dark:text-slate-400">
                     Quantity
                   </p>
-                  <div className="inline-flex items-center gap-2 rounded border border-slate-300 px-2 py-1 dark:border-slate-700">
+                  <div className="flex flex-wrap items-center gap-4">
+                    <div className="inline-flex items-center gap-2 rounded border border-slate-300 px-2 py-1 dark:border-slate-700">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setQuantity((prev) => clampQuantity(prev - 1))
+                        }
+                        disabled={quantity <= 1}
+                        className={` h-8 w-8 rounded text-lg text-slate-700 dark:text-slate-200 ${
+                          quantity <= 1
+                            ? "cursor-not-allowed opacity-50"
+                            : "cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
+                        }`}
+                      >
+                        −
+                      </button>
+                      <input
+                        type="number"
+                        min={1}
+                        max={99}
+                        value={quantity}
+                        onChange={(event) =>
+                          setQuantity(
+                            clampQuantity(Number(event.target.value || 1))
+                          )
+                        }
+                        className="h-8 w-12 bg-transparent text-center text-sm outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setQuantity((prev) => clampQuantity(prev + 1))
+                        }
+                        className="h-8 cursor-pointer w-8 rounded text-lg text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                      >
+                        +
+                      </button>
+                    </div>
                     <button
                       type="button"
-                      onClick={() =>
-                        setQuantity((prev) => clampQuantity(prev - 1))
-                      }
-                      disabled={quantity <= 1}
-                      className={`h-8 w-8 rounded text-lg text-slate-700 dark:text-slate-200 ${
-                        quantity <= 1
-                          ? "cursor-not-allowed opacity-50"
-                          : "cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
-                      }`}
+                      className="min-w-[160px] flex-1 cursor-pointer rounded bg-lantern px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:brightness-110"
                     >
-                      −
-                    </button>
-                    <input
-                      type="number"
-                      min={1}
-                      max={99}
-                      value={quantity}
-                      onChange={(event) =>
-                        setQuantity(
-                          clampQuantity(Number(event.target.value || 1))
-                        )
-                      }
-                      className="h-8 w-12 bg-transparent text-center text-sm outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setQuantity((prev) => clampQuantity(prev + 1))
-                      }
-                      className="h-8 cursor-pointer w-8 rounded text-lg text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
-                    >
-                      +
+                      Add to cart
                     </button>
                   </div>
                 </div>
