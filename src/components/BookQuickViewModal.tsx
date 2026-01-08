@@ -25,7 +25,7 @@ const clampQuantity = (value: number) => Math.min(99, Math.max(1, value));
 const localImageMap: Record<string, string[]> = {
   "beyond-the-ordeal-book-of-poems": [BeyondOrdealCover, BeyondOrdealAlt],
   "metacognitive-strategy-use-and-curriculum-design": [MetacognitiveAlt],
-  "pathways-to-proficient-readers": [KaleidoscopeOne, KaleidoscopeTwo],
+  "beyond-worksheets-in-esl-teaching": [KaleidoscopeOne, KaleidoscopeTwo],
   "tome-of-knowledge": [BookGreen],
   "tome-of-wisdom": [BookRed],
 };
@@ -102,8 +102,8 @@ const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
     ? "translate-x-6"
     : "-translate-x-6";
   const imageTransitionClass = hasInteracted
-    ? "transition-transform duration-300 ease-out"
-    : "transition-opacity duration-300 ease-out";
+    ? "transition-all duration-300 ease-out"
+    : "transition-all duration-300 ease-out";
   const imageOpacityClass = hasInteracted
     ? "opacity-100"
     : isImageVisible
@@ -174,13 +174,13 @@ const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
         </button>
 
         <div className="grid gap-6 md:grid-cols-[1fr_1fr]">
-          <div className="relative flex items-center justify-center">
+          <div className="group relative flex items-center justify-center overflow-hidden">
             {hasMultipleImages && (
               <button
                 type="button"
                 aria-label="Previous image"
                 onClick={() => handleImageChange("prev")}
-                className="absolute z-30 cursor-pointer left-4 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-100 dark:border-slate-700 dark:bg-[#111] dark:text-slate-200 dark:hover:bg-slate-800"
+                className="absolute left-4 z-30 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md opacity-0 -translate-x-7 transition-all duration-300 ease-out pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto hover:opacity-100 hover:translate-x-0 hover:pointer-events-auto hover:bg-slate-100 dark:border-slate-700 dark:bg-[#111] dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 <FaArrowLeft className="text-[16px]" aria-hidden="true" />
               </button>
@@ -201,7 +201,7 @@ const BookQuickViewModal = ({ open, book, loading, error, onClose }: Props) => {
                 type="button"
                 aria-label="Next image"
                 onClick={() => handleImageChange("next")}
-                className="absolute z-30 cursor-pointer right-4 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-100 dark:border-slate-700 dark:bg-[#111] dark:text-slate-200 dark:hover:bg-slate-800"
+                className="absolute right-4 z-30 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md opacity-0 translate-x-7 transition-all duration-300 ease-out pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto hover:opacity-100 hover:translate-x-0 hover:pointer-events-auto hover:bg-slate-100 dark:border-slate-700 dark:bg-[#111] dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 <FaArrowRight className="text-[16px]" aria-hidden="true" />
               </button>
